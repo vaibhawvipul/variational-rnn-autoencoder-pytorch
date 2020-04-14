@@ -18,7 +18,7 @@ import torch.optim as optim
 import torchvision 
 import torchvision.transforms as transforms
 
-import (os, sys)
+import os, sys
 
 torch.manual_seed(1) 
 
@@ -46,8 +46,8 @@ class LSTMNETWORK(nn.Module):
         self.encoderrnn = nn.LSTM(input_size, num_units_lstm)
 
         # a few linear layers needed for reparameterize trick
-        self.mu = nn.linear(num_units_lstm, z_size)
-        self.logvar = nn.linear(num_units_lstm, z_size)
+        self.mu = nn.Linear(num_units_lstm, z_size)
+        self.logvar = nn.Linear(num_units_lstm, z_size)
 
         # take the sampled output and regenerate the image
         self.decoderrnn = nn.LSTM(z_size, input_size)
