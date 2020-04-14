@@ -45,18 +45,29 @@ class LSTMNETWORK(nn.Module):
         # take the input
         self.encoderrnn = nn.LSTM(input_size, num_units_lstm)
 
+        # a few linear layers needed for reparameterize trick
+        self.mu = nn.linear(num_units_lstm, 128)
+        self.logvar = nn.linear(num_units_lstm, 128)
+
         # take the sampled output and regenerate the image
-        self.decoderrnn = nn.LSTM(num_units_lstm, input_size)
+        self.decoderrnn = nn.LSTM(128, input_size)
 
     def encoder(self, x):
-        x = x.view(-1, img_size)
-        return self.encoderrnn(x)
+        x = self.encoderrnn(x)
+        return self.mu(nn.ReLU(x)), self.logvar(nn.ReLU(x))
 
     def reparameterize(self, mu, logvar):
         std = torch.exp(0.5*logvar)
-        eps = torch.randn_like(std)
         return mu + eps*std
 
     def decode(self, z):
         z = z.view(-1,num_units_lstm)
         return self.decoderrnn(z)
+
+    def forward(self, x):
+        x = x.view(-1, img_size)
+        mu, logvar = self.encoder(x)
+        z = self.reparameterize(mu, logvar)
+        return self.decode(z)
+
+
