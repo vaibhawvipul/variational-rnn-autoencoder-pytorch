@@ -5,8 +5,8 @@ You can find the tensorflow implementation here - https://github.com/ericjang/dr
 
 TODO - 
 
-[ ] Implement Variational Autoencoder 
+- [ ] Implement Variational Autoencoder 
 
-[ ] Implement Soft Attention
+- [ ] Implement Soft Attention
 
-[ ] Implement Hard Attention
+- [ ] Implement Hard Attention
